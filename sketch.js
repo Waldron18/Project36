@@ -3,17 +3,30 @@ var dog, happyDog, database;
 var foodObj;
 var foodS, foodStock;
 var fedTime, lastFed, feed, addFood;
+var changingGameState, readingGameState;
+var dogImg, happyDogImg,sadDogImg, deadDogImg, bedroomImg, gardenImg, washroomImg; 
+
 
 function preload()
 {
 	//load images here
-  dogImg= loadImage("images/dogImg.png");
-  happyDogImg= loadImage("images/dogImg1.png");
+  dogImg= loadImage("images/Dog.png");
+  happyDogImg= loadImage("images/Happy.png");
+  sadDogImg = loadImage("images/Lazy.png");
+  deadDogImg = loadImage("images/deadDog.png");
+  bedroomImg = loadImage("images/BedRoom.png");
+  gardenImg = loadImage("images/Garden.png");
+  washroomImg = loadImage("images/WashRoom.png");
 }
 
 function setup() {
 	createCanvas(1000, 500);
   database = firebase.database();
+
+  readingGameState = database.ref('gameState');
+  readingGameState.on("value",function(data){
+    gameState = data.val();
+  })
 
   foodStock = database.ref("Food");
   foodStock.on("value",readStock);
@@ -47,12 +60,37 @@ function draw() {
    
   fill(255,255,254);
   textSize(15);
-  if(lastFed>=12){
+  if(lastFed >= 12){
     text("Last Feed : "+ lastFed%12 + " PM",350,30);
-  }else if(lastFed==0){
+  }else if(lastFed == 0){
     text("Last Feed : 12 AM",350,30);
   }else{
     text("Last Feed : "+ lastFed + " AM",350,30)
+  }
+
+  currentTime = hour();
+  if(currentTime == (lastFed+1)){
+    update("Playing");
+    foodObj.garden();
+  }else if(currentTime == (lastFed+2)){
+    update("Sleeping");
+    foodObj.bedroom();
+  }else if(currentTime > (lastFed+2) && currentTime<=(lastFed+4)){
+    update("Bathing");
+    foodObj.washroom();
+  }else{
+    update("Hungry");
+    foodObj.display();
+  }
+
+  if(gameState!="Hungry"){
+    feed.hide();
+    addFood.hide();
+    dog.remove();
+  }else{
+    feed.show();
+    addFood.show();
+    dog.addImage(sadDogImg);
   }
 
   drawSprites();
@@ -77,5 +115,11 @@ function addFoods(){
   foodS++;
   database.ref('/').update({
     Food:foodS
+  })
+}
+
+function update(gameState){
+  database.ref('/').update({
+    gameState: gameState
   })
 }

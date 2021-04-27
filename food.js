@@ -22,6 +22,18 @@ class Food {
         return this.foodStock;
     }
 
+    bedroom(){
+       image(bedroomImg,550,500);
+    }
+
+    garden(){
+       image(gardenImg,550,500);
+    }
+
+    washroom(){
+       image(washroomImg,550,500);
+    }
+
 display(){
     this.foodStock = foodS;
     var x = 80 , y = 100;
