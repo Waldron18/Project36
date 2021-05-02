@@ -50,6 +50,22 @@ function setup() {
 
 function draw() {  
   background(46, 139, 87);
+
+  currentTime = hour();
+  if(currentTime == (lastFed)){
+    update("Playing");
+    foodObj.garden();
+  }else if(currentTime == (lastFed+2)){
+    update("Sleeping");
+    foodObj.bedroom();
+  }else if(currentTime > (lastFed+2) && currentTime<=(lastFed+4)){
+    update("Bathing");
+    foodObj.washroom();
+  }else{
+    update("Hungry");
+    foodObj.display();
+  }
+
   
   foodObj.display();
 
@@ -67,23 +83,7 @@ function draw() {
   }else{
     text("Last Feed : "+ lastFed + " AM",350,30)
   }
-
-  currentTime = hour();
-  if(currentTime == (lastFed+1)){
-    update("Playing");
-    foodObj.garden();
-  }else if(currentTime == (lastFed+2)){
-    update("Sleeping");
-    foodObj.bedroom();
-  }else if(currentTime > (lastFed+2) && currentTime<=(lastFed+4)){
-    update("Bathing");
-    foodObj.washroom();
-  }else{
-    update("Hungry");
-    foodObj.display();
-  }
-
-  if(gameState!="Hungry"){
+  /*if(gameState!="Hungry"){
     feed.hide();
     addFood.hide();
     dog.remove();
@@ -91,7 +91,7 @@ function draw() {
     feed.show();
     addFood.show();
     dog.addImage(sadDogImg);
-  }
+  }*/
 
   drawSprites();
   }

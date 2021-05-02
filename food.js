@@ -23,15 +23,15 @@ class Food {
     }
 
     bedroom(){
-       image(bedroomImg,550,500);
+        background(bedroomImg);
     }
 
     garden(){
-       image(gardenImg,550,500);
+        background(gardenImg);
     }
 
     washroom(){
-       image(washroomImg,550,500);
+       background(washroomImg);
     }
 
 display(){
